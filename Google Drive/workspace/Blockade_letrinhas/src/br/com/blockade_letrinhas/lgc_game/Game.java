@@ -1,8 +1,6 @@
 package br.com.blockade_letrinhas.lgc_game;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -11,9 +9,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import br.com.blockade_letrinhas.lgc_base.BackgroundStandart;
+import br.com.blockade_letrinhas.lgc_base.Painter;
+import br.com.blockade_letrinhas.lgc_base.Updater;
 
 public class Game extends JFrame{
 	
+	private static final int UPS = 1000 / 20;
 	private static final int FPS = 1000 / 20;
 
 	private static final int JANELA_ALTURA = 450;
@@ -66,27 +67,22 @@ public class Game extends JFrame{
 	private void load(){
 		
 	}
-	
+
+
 	public void startGame(){
 		long prxUpdate = 0;
+		long paintInterval = 1000 / FPS; // intervalo necessario para ter o FPS desejado.
+		long updateInterval = 1000 / UPS; //intervalo necessario para ter a quantidade desejada de Updates por segundo.
+
+		background = new BackgroundOfGame(tela.getWidth(), tela.getHeight());
+		background.load();
+
+		Painter painter = new Painter(background, g2d, tela, JANELA_LARGURA, JANELA_ALTURA);
+		Updater updater = new Updater(background);
+
+		painter.runAtRate(FPS);
+		updater.runAtRate(UPS);
 		
-		while (true) {
-			if(System.currentTimeMillis() >= prxUpdate){
-				g2d.setColor(Color.BLACK);
-				g2d.fillRect(0, 0, JANELA_LARGURA, JANELA_ALTURA);
-				
-				if(!(background instanceof BackgroundOfGame)){
-					background = new BackgroundOfGame(tela.getWidth(), tela.getHeight());
-					background.load();
-				}
-				
-				background.update();
-				background.paint(g2d);
-				
-				tela.repaint();
-				prxUpdate = System.currentTimeMillis() + FPS;
-			}
-		}
 	}
 	
 	
@@ -94,5 +90,4 @@ public class Game extends JFrame{
 		Game jogo = new Game();
 		jogo.startGame();
 	}
-
 }
