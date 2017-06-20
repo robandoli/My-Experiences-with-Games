@@ -100,7 +100,7 @@ public class BackgroundOfGame extends BackgroundStandart {
 	}
 
 	@Override
-	public void update() {
+	public synchronized void update() {
 		
 		if ( estado != Estado.JOGANDO){
 			return;
@@ -205,7 +205,7 @@ public class BackgroundOfGame extends BackgroundStandart {
 	}
 
 	@Override
-	public void paint(Graphics2D g) {
+	public synchronized void  paint(Graphics2D g) {
 		
 		if(fruta.isAtivo()){
 			fruta.desenha(g);
